@@ -4,7 +4,8 @@
   "description": "A smart, interactive web application that helps users understand the election process, timelines, and terminology, built for the Google Prompting War competition.",
   "main": "app.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "build": "echo export const GEMINI_API_KEY = \\\"$GEMINI_API_KEY\\\"; > config.js"
   },
   "repository": {
     "type": "git",
