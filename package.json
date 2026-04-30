@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --coverage",
-    "build": "echo export const GEMINI_API_KEY = \\\"$GEMINI_API_KEY\\\"; > config.js"
+    "build": "node -e \"require('fs').writeFileSync('config.js', 'export const GEMINI_API_KEY = \\\"' + process.env.GEMINI_API_KEY + '\\\";')\""
   },
   "repository": {
     "type": "git",
