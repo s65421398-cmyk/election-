@@ -1,0 +1,26 @@
+{
+  "name": "election-assistant",
+  "version": "1.0.0",
+  "description": "A smart, interactive web application that helps users understand the election process, timelines, and terminology, built for the Google Prompting War competition.",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s65421398-cmyk/election-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/s65421398-cmyk/election-/issues"
+  },
+  "homepage": "https://github.com/s65421398-cmyk/election-#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.28.6",
+    "@babel/preset-env": "^7.29.2",
+    "jest": "^30.3.0"
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1777538914674" clover="3.2.0">
+  <project timestamp="1777538914674" name="All files">
+    <metrics statements="10" coveredstatements="10" conditionals="18" coveredconditionals="18" methods="4" coveredmethods="4" elements="32" coveredelements="32" complexity="0" loc="10" ncloc="10" packages="1" files="1" classes="1"/>
+    <file name="utils.js" path="C:\Users\Hp\.gemini\antigravity\scratch\election-assistant\utils.js">
+      <metrics statements="10" coveredstatements="10" conditionals="18" coveredconditionals="18" methods="4" coveredmethods="4"/>
+      <line num="12" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="13" count="3" type="stmt"/>
+      <line num="28" count="6" type="cond" truecount="4" falsecount="0"/>
+      <line num="29" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="31" count="4" type="stmt"/>
+      <line num="32" count="4" type="stmt"/>
+      <line num="33" count="9" type="cond" truecount="4" falsecount="0"/>
+      <line num="44" count="8" type="cond" truecount="4" falsecount="0"/>
+      <line num="45" count="4" type="stmt"/>
+      <line num="46" count="4" type="cond" truecount="2" falsecount="0"/>
+    </file>
+  </project>
+</coverage>

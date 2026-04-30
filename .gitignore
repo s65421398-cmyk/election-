@@ -4,3 +4,6 @@ config.js
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Dependencies
+node_modules/

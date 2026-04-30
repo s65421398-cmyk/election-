@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GEMINI_API_KEY } from "./config.js";
+import { sanitizeHTML, filterGlossary, isValidChatMessage } from "./utils.js";
 
 /**
  * Election Process Assistant - Application Logic
@@ -193,10 +194,7 @@ function initGlossary() {
     const searchInput = document.getElementById('glossary-search');
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
-        const filtered = glossaryData.filter(item => 
-            item.term.toLowerCase().includes(query) || 
-            item.definition.toLowerCase().includes(query)
-        );
+        const filtered = filterGlossary(glossaryData, query);
         renderGlossaryList(filtered);
     });
 }
@@ -296,8 +294,8 @@ async function handleChatMessage(text) {
     errorBanner.classList.add('hidden');
 
     // 1. Validate Input
-    if (text.length > 500) {
-        showError("Please keep your question under 500 characters.");
+    if (!isValidChatMessage(text)) {
+        showError("Please enter a valid question under 500 characters.");
         return;
     }
 
@@ -381,15 +379,4 @@ function disableChat() {
     document.querySelectorAll('.chip-btn').forEach(btn => btn.disabled = true);
 }
 
-// --- Utilities ---
 
-/**
- * Prevents XSS by escaping HTML entities.
- * @param {string} str 
- * @returns {string} Escaped string
- */
-function sanitizeHTML(str) {
-    const temp = document.createElement('div');
-    temp.textContent = str;
-    return temp.innerHTML;
-}
