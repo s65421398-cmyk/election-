@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicGuide | Election Process Assistant</title>
+    <meta name="description" content="A nonpartisan guide to understanding the election process.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Material Symbols for accessible icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+</head>
+<body>
+    <header class="main-header" role="banner">
+        <div class="header-content">
+            <h1>CivicGuide</h1>
+            <p>Your interactive, nonpartisan election assistant</p>
+            <a href="https://www.google.com/maps/search/polling+station+near+me" target="_blank" rel="noopener noreferrer" class="btn primary-btn" aria-label="Find polling station on Google Maps">
+                <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+                Find Polling Station
+            </a>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <!-- Tab Navigation -->
+        <nav aria-label="Main Navigation">
+            <ul class="tab-list" role="tablist">
+                <li role="presentation">
+                    <button class="tab-btn" id="tab-timeline" role="tab" aria-selected="true" aria-controls="panel-timeline" tabindex="0">
+                        <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span> Timeline
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button class="tab-btn" id="tab-chat" role="tab" aria-selected="false" aria-controls="panel-chat" tabindex="-1">
+                        <span class="material-symbols-outlined" aria-hidden="true">chat</span> Ask Anything
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button class="tab-btn" id="tab-glossary" role="tab" aria-selected="false" aria-controls="panel-glossary" tabindex="-1">
+                        <span class="material-symbols-outlined" aria-hidden="true">menu_book</span> Glossary
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Tab Panels -->
+        <div class="tab-content">
+            
+            <!-- Timeline Panel -->
+            <article id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline" class="panel active">
+                <header class="panel-header">
+                    <h2>The Election Journey</h2>
+                    <p>Follow the step-by-step phases of a general election. Click to expand each phase.</p>
+                </header>
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Injected by JS -->
+                </div>
+            </article>
+
+            <!-- Chat Panel -->
+            <article id="panel-chat" role="tabpanel" aria-labelledby="tab-chat" class="panel hidden">
+                <header class="panel-header">
+                    <h2>Civic AI Assistant</h2>
+                    <p>Ask anything about elections, voting rights, and government.</p>
+                </header>
+                
+                <div class="chat-interface">
+                    <div class="chat-history" id="chat-history" role="log" aria-live="polite">
+                        <div class="message ai-message">
+                            <span class="material-symbols-outlined avatar" aria-hidden="true">smart_toy</span>
+                            <div class="message-content">Hello! I'm your nonpartisan civic education assistant. What would you like to know about the democratic process?</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Suggestions -->
+                    <div class="suggestion-chips" aria-label="Quick question suggestions">
+                        <button class="chip-btn">How does the Electoral College work?</button>
+                        <button class="chip-btn">What is gerrymandering?</button>
+                        <button class="chip-btn">How do I register to vote?</button>
+                    </div>
+
+                    <!-- Error Banner -->
+                    <div id="error-banner" class="error-banner hidden" role="alert"></div>
+
+                    <form id="chat-form" class="chat-input-area" aria-label="Chat input form">
+                        <input type="text" id="chat-input" placeholder="Type your question here..." aria-label="Type your question" required>
+                        <button type="submit" id="send-btn" class="btn icon-btn" aria-label="Send message">
+                            <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                        </button>
+                    </form>
+                </div>
+            </article>
+
+            <!-- Glossary Panel -->
+            <article id="panel-glossary" role="tabpanel" aria-labelledby="tab-glossary" class="panel hidden">
+                <header class="panel-header">
+                    <h2>Election Glossary</h2>
+                    <p>Learn the vocabulary of democracy.</p>
+                </header>
+                
+                <div class="search-container">
+                    <label for="glossary-search" class="visually-hidden">Search glossary terms</label>
+                    <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+                    <input type="text" id="glossary-search" placeholder="Search terms (e.g., ballot)..." aria-controls="glossary-list">
+                </div>
+
+                <div class="glossary-list" id="glossary-list" role="list">
+                    <!-- Injected by JS -->
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer class="main-footer" role="contentinfo">
+        <p>&copy; 2026 Civic Education Initiative | Powered by Google Gemini</p>
+    </footer>
+
+    <!-- App Logic -->
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
