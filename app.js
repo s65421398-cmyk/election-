@@ -3,11 +3,35 @@ import { GEMINI_API_KEY } from "./config.js";
 import { sanitizeHTML, filterGlossary, isValidChatMessage } from "./utils.js";
 
 /**
- * Election Process Assistant - Application Logic
- * Modular design separated into Setup, Tabs, Timeline, Glossary, and Chat logic.
+ * @fileoverview Election Process Assistant — Application Logic.
+ * 
+ * This module provides the core interactive functionality for the CivicGuide
+ * Election Process Assistant web application. It is organized into clearly
+ * separated concerns:
+ * 
+ * 1. **Data Layer** — Static election timeline & glossary datasets.
+ * 2. **Tab Navigation** — Accessible, keyboard-navigable tab switching.
+ * 3. **Timeline Renderer** — Accordion-based election phase explorer.
+ * 4. **Glossary Renderer** — Searchable, alphabetically sorted term list.
+ * 5. **Chat Assistant** — Google Gemini-powered Q&A interface.
+ * 
+ * All user-facing text is sanitized via {@link sanitizeHTML} to prevent XSS.
+ * 
+ * @module app
+ * @requires @google/generative-ai
+ * @requires ./config.js
+ * @requires ./utils.js
  */
 
-// --- Data Objects ---
+// =====================================================================
+// Data Layer — Static Datasets
+// =====================================================================
+
+/**
+ * Timeline data representing the major phases of a U.S. general election.
+ * Each entry contains a title, approximate duration, and bullet-point details.
+ * @type {Array<{title: string, duration: string, details: string[]}>}
+ */
 
 const timelineData = [
     {
@@ -66,6 +90,11 @@ const timelineData = [
     }
 ];
 
+/**
+ * Glossary of commonly used election and civic terminology.
+ * Each entry maps a term to its plain-language definition.
+ * @type {Array<{term: string, definition: string}>}
+ */
 const glossaryData = [
     { term: "Ballot", definition: "A device (paper or electronic) used to cast votes in an election." },
     { term: "Electoral College", definition: "A body of people representing the states of the US, who formally cast votes for the election of the president and vice president." },
@@ -81,8 +110,14 @@ const glossaryData = [
     { term: "Primary Election", definition: "An election to appoint delegates to a party conference or to select the candidates for a principal, especially presidential, election." }
 ];
 
-// --- Initialization ---
+// =====================================================================
+// Initialization — Bootstrap on DOMContentLoaded
+// =====================================================================
 
+/**
+ * Entry point. Initializes all interactive modules once the DOM is ready.
+ * Execution order matters: Tabs → Timeline → Glossary → Chat.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initTimeline();
@@ -90,10 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initChat();
 });
 
-// --- Tab Navigation Logic ---
+// =====================================================================
+// Tab Navigation Logic
+// =====================================================================
 
 /**
- * Initializes accessible tab navigation.
+ * Sets up accessible tab navigation with click and keyboard (ArrowLeft/Right)
+ * handlers. Conforms to WAI-ARIA Tabs pattern.
+ * @returns {void}
  */
 function initTabs() {
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -117,7 +156,11 @@ function initTabs() {
 }
 
 /**
- * Switches the active tab panel.
+ * Switches the active tab panel, updating ARIA attributes and visibility.
+ * @param {HTMLElement} selectedBtn - The tab button that was activated.
+ * @param {NodeList} allBtns - All tab buttons in the tablist.
+ * @param {NodeList} allPanels - All corresponding tab panels.
+ * @returns {void}
  */
 function switchTab(selectedBtn, allBtns, allPanels) {
     // Deselect all
@@ -135,10 +178,15 @@ function switchTab(selectedBtn, allBtns, allPanels) {
     document.getElementById(panelId).classList.remove('hidden');
 }
 
-// --- Timeline Logic ---
+// =====================================================================
+// Timeline Logic
+// =====================================================================
 
 /**
- * Renders the timeline array into the DOM.
+ * Renders the {@link timelineData} array into an accordion-style UI inside
+ * the `#timeline-container` element. The first phase is expanded by default.
+ * Each phase button toggles its own expanded state while collapsing others.
+ * @returns {void}
  */
 function initTimeline() {
     const container = document.getElementById('timeline-container');
@@ -183,10 +231,14 @@ function initTimeline() {
     });
 }
 
-// --- Glossary Logic ---
+// =====================================================================
+// Glossary Logic
+// =====================================================================
 
 /**
- * Renders and handles search for the glossary.
+ * Initializes the glossary panel by rendering all terms and attaching
+ * a live-search listener to the `#glossary-search` input.
+ * @returns {void}
  */
 function initGlossary() {
     renderGlossaryList(glossaryData);
@@ -200,7 +252,10 @@ function initGlossary() {
 }
 
 /**
- * Renders a list of glossary items to the DOM.
+ * Renders a filtered/sorted list of glossary items into `#glossary-list`.
+ * Shows a "no terms found" message if the array is empty.
+ * @param {Array<{term: string, definition: string}>} data - Glossary entries to render.
+ * @returns {void}
  */
 function renderGlossaryList(data) {
     const list = document.getElementById('glossary-list');
@@ -226,12 +281,21 @@ function renderGlossaryList(data) {
     });
 }
 
-// --- Chat Assistant Logic ---
+// =====================================================================
+// Chat Assistant Logic (Google Gemini Integration)
+// =====================================================================
 
+/**
+ * Active Gemini chat session. `null` until successfully initialized.
+ * @type {?Object}
+ */
 let chatSession = null;
 
 /**
- * Initializes Gemini and sets up event listeners for the chat interface.
+ * Initializes the Google Gemini chat session and binds event listeners
+ * to the chat form and suggestion chip buttons. Falls back gracefully
+ * if the API key is missing or invalid.
+ * @returns {void}
  */
 function initChat() {
     const form = document.getElementById('chat-form');
@@ -318,10 +382,17 @@ async function handleChatMessage(text) {
     }
 }
 
-// --- Chat UI Helpers ---
+// =====================================================================
+// Chat UI Helpers
+// =====================================================================
 
 /**
- * Appends a message bubble to the chat container.
+ * Creates and appends a message bubble to the chat container.
+ * @param {'user'|'ai'} sender - Identifies who sent the message.
+ * @param {string} text - The message content (will be sanitized).
+ * @param {HTMLElement} container - The chat history container element.
+ * @param {boolean} [isTyping=false] - If true, applies a "typing" CSS class.
+ * @returns {string} The auto-generated DOM id of the new message element.
  */
 function appendMessageToUI(sender, text, container, isTyping = false) {
     const id = 'msg-' + Date.now();
@@ -344,7 +415,12 @@ function appendMessageToUI(sender, text, container, isTyping = false) {
 }
 
 /**
- * Updates an existing message bubble with new content (used after fetching API response).
+ * Replaces the content of an existing message bubble. Used to swap the
+ * "Thinking..." placeholder with the actual API response. Also performs
+ * lightweight Markdown-to-HTML conversion for bold text (`**...**`).
+ * @param {string} id - The DOM id of the message element to update.
+ * @param {string} text - The new message content.
+ * @returns {void}
  */
 function updateMessageInUI(id, text) {
     const msgEl = document.getElementById(id);
@@ -362,7 +438,9 @@ function updateMessageInUI(id, text) {
 }
 
 /**
- * Displays an error message banner.
+ * Displays a non-blocking error banner to the user inside the chat panel.
+ * @param {string} message - The error message to display.
+ * @returns {void}
  */
 function showError(message) {
     const banner = document.getElementById('error-banner');
@@ -371,7 +449,9 @@ function showError(message) {
 }
 
 /**
- * Disables chat inputs in case of critical error.
+ * Disables all chat input controls (text field, send button, and suggestion
+ * chips) in case of a critical initialization error.
+ * @returns {void}
  */
 function disableChat() {
     document.getElementById('chat-input').disabled = true;

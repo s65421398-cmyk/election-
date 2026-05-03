@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --coverage",
-    "build": "node -e \"require('fs').writeFileSync('config.js', 'export const GEMINI_API_KEY = \\\"' + process.env.GEMINI_API_KEY + '\\\";')\""
+    "lint": "eslint . --ext .js",
+    "build": "terser app.js -o app.min.js && cleancss -o style.min.css style.css && node -e \"require('fs').writeFileSync('config.js', 'export const GEMINI_API_KEY = \\\"' + process.env.GEMINI_API_KEY + '\\\";')\""
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.28.6",
     "@babel/preset-env": "^7.29.2",
-    "jest": "^30.3.0"
+    "clean-css-cli": "^5.6.3",
+    "eslint": "^8.57.1",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
+    "terser": "^5.46.2"
   }
 }

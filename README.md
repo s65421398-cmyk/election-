@@ -1,59 +1,131 @@
-# CivicGuide: The Election Process Assistant
+# CivicGuide — Election Process Assistant
 
-A smart, interactive web application that helps users understand the election process, timelines, and terminology, built for the Google Prompting War competition.
+> A smart, interactive, AI-powered web application that helps citizens understand the election process, timelines, and terminology. Built for the **Google Prompting War** competition.
 
-## 1. Chosen Vertical
-**Civic Education / Government Services**
+[![Automated Testing](https://github.com/s65421398-cmyk/election-/actions/workflows/test.yml/badge.svg)](https://github.com/s65421398-cmyk/election-/actions)
 
-## 2. Approach and Logic
-CivicGuide is designed to be highly accessible, interactive, and strictly nonpartisan. The architecture uses a custom-built Tab interface to separate concerns logically:
-- **Timeline**: Uses an expandable accordion structure to break down complex election phases into digestible chunks without overwhelming the user.
-- **Ask Anything (AI Chat)**: Connects directly to the Google Gemini API to provide instantaneous, neutral answers to complex civic questions. The system prompt forces the AI to remain educational and refuse political opinions.
-- **Glossary**: Implements a real-time DOM-filtering search to allow users to quickly lookup confusing political jargon (like "gerrymandering" or "incumbent").
+---
 
-The design relies entirely on vanilla HTML, CSS, and JavaScript. We avoided CSS frameworks to ensure maximum performance and maintain complete control over the layout, transitions, and accessibility standards (ARIA labels).
+## 🌟 Features
 
-## 3. How the Solution Works
-1. **Landing**: The user is greeted by a clean, mobile-responsive hero section utilizing Navy Blue (`#185FA5`) and modern typography (Google Fonts 'Inter').
-2. **Finding the Polling Station**: A direct CTA links the user to Google Maps with a pre-filled search for local polling stations.
-3. **Exploring the Timeline**: The user clicks the "Timeline" tab and expands the phases of an election (from Candidate Declaration to Inauguration) to read the details.
-4. **Asking Questions**: The user clicks the "Ask Anything" tab. They can either click a quick-suggestion chip or type their own question. The input is sanitized and sent to the Gemini API, which streams back an educational response.
-5. **Looking up Terms**: The user clicks the "Glossary" tab and types into the search bar. The list of terms filters instantly based on the keystrokes.
+### 📅 Interactive Election Timeline
+- Visual, accordion-based walkthrough of all major election phases
+- From **Candidate Declaration** through to **Inauguration Day**
+- Fully accessible with keyboard navigation and ARIA attributes
 
-## 4. Assumptions Made
-- The application focuses on a general, high-level overview of the American democratic election process (Primaries, Electoral College, etc.), rather than a hyper-specific local or foreign election.
-- The target audience reads English.
-- The user has access to a modern browser that supports ES Modules (`type="module"`).
+### 🤖 Civic AI Assistant (Google Gemini)
+- Powered by **Google Gemini 1.5 Flash** for real-time, conversational Q&A
+- Nonpartisan, educational responses about elections, voting rights, and government
+- Input validation, XSS sanitization, and graceful error handling
 
-## 5. Google Services Used
-- **Google Gemini API** (`@google/generative-ai`): Powers the "Ask Anything" chat assistant.
-- **Google Fonts**: Provides the 'Inter' and 'Material Symbols' typography.
-- **Google Maps**: Used in the main call-to-action button to help voters find their polling locations.
+### 📖 Searchable Glossary
+- 12+ key election terms with plain-language definitions
+- Live, instant search filtering by term or definition
+- Alphabetically sorted, accessible list with `role="listitem"`
 
-## 6. Setup Instructions
-To run this project locally:
+### 🌐 Google Services Integration
+- **Firebase Analytics** — Page view tracking and custom event logging
+- **Google Translate Widget** — Multi-language accessibility for all users
+- **Google Maps** — "Find Polling Station" link using Google Maps search
 
-1. Clone or download the repository.
-2. Rename `config.example.js` to `config.js`.
-3. Obtain a Gemini API Key from Google AI Studio.
-4. Open `config.js` and paste your API key:
-   ```javascript
-   export const GEMINI_API_KEY = "YOUR_REAL_API_KEY_HERE";
-   ```
-5. Start a local HTTP server in the project directory (required for ES modules to work without CORS errors). If you have Python installed, run:
-   ```bash
-   python -m http.server 8000
-   ```
-6. Open your browser and navigate to `http://localhost:8000`.
+---
 
-## 🔒 Security Notes
-- **Never commit your real API keys to version control!** 
-- The active `config.js` file is explicitly listed in the `.gitignore` to prevent accidental uploads to GitHub. Only `config.example.js` is tracked.
+## 🏗️ Architecture & Code Quality
 
-## ✅ Testing Checklist
-- [x] Timeline phases expand and collapse correctly
-- [x] Chat sends message and receives Gemini response
-- [x] Glossary search filters in real time
-- [x] Quick chips auto-fill the chat input
-- [x] App works on mobile screen (375px width)
-- [x] Error state shown if API key is missing or invalid
+### Modular Design
+```
+├── index.html       # Semantic HTML5 with ARIA, resource hints, preloads
+├── style.css        # CSS custom properties, animations, responsive design
+├── app.js           # Core logic: Tabs, Timeline, Glossary, Chat (JSDoc'd)
+├── utils.js         # Pure utility functions (sanitize, filter, validate)
+├── config.js        # API key configuration (gitignored)
+├── tests/
+│   ├── utils.test.js    # Unit tests for all utility functions
+│   └── app.test.js      # DOM/UI tests for tabs, timeline, glossary, chat
+└── .github/workflows/
+    └── test.yml         # CI/CD: Lint → Test (multi-node) → Build
+```
+
+### Testing Strategy
+- **31 automated tests** across 2 test suites
+- **100% code coverage** on utility functions (statements, branches, functions, lines)
+- DOM testing with `jest-environment-jsdom` for UI component validation
+- Tests cover: tab switching, timeline rendering, glossary search, chat UI, XSS prevention, error handling, accessibility attributes
+
+### Performance Optimizations
+- DNS prefetch & preconnect for all external origins
+- Critical asset preloading (`style.css`, `app.js`, fonts)
+- Deferred non-critical scripts
+- Minification build step (`terser` for JS, `clean-css` for CSS)
+- Skip-to-content link for screen reader users
+
+### CI/CD Pipeline
+- **Lint** → ESLint code quality checks
+- **Test** → Jest with coverage (Node 18.x & 20.x matrix)
+- **Build** → Asset minification with artifact size verification
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ and npm
+- A [Google Gemini API Key](https://aistudio.google.com/app/apikey)
+
+### Installation
+```bash
+git clone https://github.com/s65421398-cmyk/election-.git
+cd election-
+npm install
+```
+
+### Configuration
+Create a `config.js` file in the root:
+```js
+export const GEMINI_API_KEY = "YOUR_API_KEY_HERE";
+```
+
+### Run Locally
+Open `index.html` in a browser, or use a local server:
+```bash
+npx serve .
+```
+
+### Run Tests
+```bash
+npm test          # Run all tests with coverage
+npm run lint      # Run ESLint code quality checks
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Vanilla HTML5, CSS3, JavaScript (ES Modules) |
+| **AI** | Google Gemini 1.5 Flash via `@google/generative-ai` |
+| **Analytics** | Firebase Analytics SDK |
+| **i18n** | Google Translate Widget |
+| **Maps** | Google Maps Search |
+| **Testing** | Jest 30 + jsdom |
+| **Linting** | ESLint 8 |
+| **CI/CD** | GitHub Actions |
+| **Fonts** | Google Fonts (Inter), Material Symbols |
+
+---
+
+## ♿ Accessibility
+
+- Full WAI-ARIA compliance (tabs, roles, live regions)
+- Keyboard navigation (Arrow keys for tabs)
+- Focus-visible indicators on all interactive elements
+- Skip-to-content link
+- Screen-reader–friendly structure with semantic HTML5
+- `aria-live="polite"` on chat history for dynamic content
+
+---
+
+## 📄 License
+
+ISC © 2026 Civic Education Initiative
